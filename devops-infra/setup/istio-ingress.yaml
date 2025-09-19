@@ -17,3 +17,6 @@ spec:
       port: 443
       targetPort: 443
     #  nodePort: 30443
+    - name: tcp-postgres
+      port: 5432
+      targetPort: 5432

@@ -23,4 +23,11 @@ spec:
     hosts:
     - "*.k8s.dev"       # 와일드카드 호스트
     - "gitea-https.dev-tools.svc.cluster.local"
-
+  - port:
+      number: 5432
+      name: tcp-postgres
+      protocol: TCP
+    hosts:
+    - "postgres-dev.k8s.dev"
+    - "postgres-stg.k8s.dev"
+    - "postgres.k8s.dev"
