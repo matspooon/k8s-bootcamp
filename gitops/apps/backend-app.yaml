@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    #repoURL: https://github.com/your-org/gitops-repo.git
+    repoURL: http://gitea-http.dev-tools.svc.cluster.local:3000/admin/manifest-repo.git
+    path: charts/backend-app
+    targetRevision: main
+    helm:
+      valueFiles:
+        - ../../envs/dev/backend-values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: apps #helm install/update taget namespace/Argocd deploy target namespace에 의해 변경됨
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

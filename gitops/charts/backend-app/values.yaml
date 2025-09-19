@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  #repository: gitea-https.dev-tools.svc.cluster.local:443/admin/backend-app
+  repository: gitea.k8s.dev:443/admin/backend-app
+  tag: ""
+  #pullPolicy: IfNotPresent
+  pullPolicy: Always
+
+imagePullSecrets: 
+- name: docker-registry-gitea-cred
+
+service:
+  name: backend-app
+  namespace: apps-dev
+  type: ClusterIP
+  port: 8080
+
+virtualService:
+  gateways:
+  - istio-system/msa-gateway
+
+db:
+  secretName: db-secret # k8s secret name
