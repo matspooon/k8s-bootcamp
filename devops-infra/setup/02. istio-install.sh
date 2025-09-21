@@ -1,5 +1,6 @@
-# istion gateway 설치 스크립트
-# 참조 : https://istio.io/latest/docs/setup/install/helm/
+#! /bin/bash
+# istio gateway 설치
+# 참조 : https://istio.io/latest/docs/setup/install/helm
 
 helm repo add istio https://istio-release.storage.googleapis.com/charts
 helm repo update
