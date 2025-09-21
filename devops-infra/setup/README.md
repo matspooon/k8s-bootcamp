@@ -64,3 +64,8 @@ docker registry는 default로 https통신을 강제한다.
 k8s cluster 내에 설치한 gitea는 http service만을 제공하므로 별도의 HTTPS Proxy를 통하지 않는다면, http통신을 하도록 변경해야 하는데,
 argocd 설정이나, apps.yaml에서 포함하는 repository설정으로는 이것을 강제할 수 없고, docker setting으로만 변경할 수 있다.
 window docker desktop의 경우 '설정' / 'Docker Engine' 메뉴에서 다음을 추가함으로써 http 통신을 하도록 변경할 수 있다.
+
+# windows11의 로컬 컴퓨터에 설치된 인증서 관리자 설정
+- Win + R 키를 누름 → 실행 창 열기
+- certmgr.msc 입력 → Enter
+- '신뢰할 수 있는 루트 인증기관/인증서'를 선택하여 설치된 로컬 인증서를 확인
