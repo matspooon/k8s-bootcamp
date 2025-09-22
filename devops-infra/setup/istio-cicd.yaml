@@ -64,7 +64,7 @@ spec:
       uri: /         # 기본 컨텍스트 경로에 맞춰 rewrite
     route:
       - destination:
-          host: argocd-server.argocd.svc.cluster.local
+          host: argocd-server.dev-tools.svc.cluster.local
           port:
             number: 80
 ---

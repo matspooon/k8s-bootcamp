@@ -1,15 +1,10 @@
-# 1. --------------------------------------------
+# 1. *.k8s.dev 사설 인증서 생성
 openssl req -x509 -nodes -days 365 \
   -newkey rsa:2048 \
   -keyout k8s.dev.key \
   -out k8s.dev.crt \
   -config k8s.dev.cnf \
   -extensions req_ext
-
-# 2. 쿠버네티스 시크릿 생성 (istio-system 네임스페이스에 TLS 시크릿 생성)
-kubectl create -n istio-system secret tls selfsigned-gateway-cert \
-  --key k8s.dev.key \
-  --cert k8s.dev.crt
 
 # 3. --------------------------------------------
 # 신뢰할 수 없는 기관으로 인한 TLS 오류를 보지 않고자 할 경우 윈도우에 신뢰할 수 있는 루트 인증 기관으로 k8s.crt를 추가

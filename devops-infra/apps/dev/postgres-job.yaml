@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-init-job
+  namespace: apps-dev
+spec:
+  template:
+    spec:
+      containers:
+      - name: seed
+        image: postgres:17
+        command: ["psql"]
+        args:
+          [
+            "-h", "postgres-service",     # postgres service 이름
+            "-U", "postgres",         # 유저
+            "-d", "k8sdb",         # DB 이름
+            "-f", "/scripts/schema/db-schema.sql",
+            "-f", "/scripts/data/db-init-data.sql"
+          ]
+        env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: postgres-password
+        volumeMounts:
+        - name: db-schema
+          mountPath: /scripts/schema
+        - name: db-init-data
+          mountPath: /scripts/data
+      restartPolicy: Never
+      volumes:
+      - name: db-schema
+        configMap:
+          name: db-schema
+      - name: db-init-data
+        configMap:
+          name: db-init-data

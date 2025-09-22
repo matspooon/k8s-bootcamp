@@ -10,3 +10,7 @@
 ## Gitea
 * 코드 Repo : Github 사용
 * manifest Repo : 신규 빌드가 구성되면 빌드 넘버를 업데이트하여 ArgoCD가 배포를 실행하도록 함
+
+## docker desktop의 kubernetes cluster에 생성한 PV를 확인하는 방법
+다음 명령으로 kubernetes의 워커노드에 들어가면 확인 가능
+docker run -it --privileged --pid=host justincormack/nsenter1

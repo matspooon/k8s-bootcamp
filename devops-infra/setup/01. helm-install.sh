@@ -17,7 +17,7 @@ sudo apt-get update
 sudo apt-get install -y kubectl
 
 kubectl version --client
-then
+else
   echo ">>> kubectl 설치 스킵..."
 fi
 
