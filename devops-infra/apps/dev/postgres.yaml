@@ -51,7 +51,7 @@ spec:
       - name: postgres-data
         #emptyDir: {}   # 테스트용, 재기동 시 데이터 유지 안 됨
         persistentVolumeClaim:
-          claimName: postgres-pvc
+          claimName: postgres-dev-pvc
 
 ---
 apiVersion: v1

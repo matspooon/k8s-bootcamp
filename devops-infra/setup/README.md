@@ -63,6 +63,9 @@ kubectl get secret docker-registry-credential -n dev-tools -o jsonpath='{.data.\
 # argocd application 강제 삭제
 kubectl delete application backend-app -n argocd --grace-period=0 --force --cascade=orphan
 kubectl patch application backend-app -n argocd -p '{"metadata":{"finalizers":null}}' --type=merge
+
+# kubernetes cluster에 생성한 PV(PersistVolume)의 데이터를 확인하기 위한 container 실행
+docker run -it --privileged --pid=host justincormack/nsenter1
 </pre>
 
 # argocd가 배포시 사용하는 image pull하는 docker registry문제
