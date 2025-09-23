@@ -1,22 +1,28 @@
-# K8s에서 CICD 구성 스크립트
+# K8s CICD 구성을 위한 소프트웨어 설치
+## 개요
 <pre>
-helm-install.sh # shell script to install Helm charts & apply manifests
-secrets/ # examples of k8s Secret manifests (SSH keys, admin pw)
-  gitea-ssh-key-secret.yaml
-  jenkins-credentials-secret.yaml
-manifests/
-  argocd-application.yaml
-  jenkins-agent-serviceaccount.yaml
-sample-repos/
-  manifest-repo/ # layout for manifest repo (to create in Gitea)
-    environments/dev/kustomization.yaml
-    environments/dev/patch-deployment.yaml
-    environments/dev/values.yaml
-  app-repo/ # minimal app to build (Dockerfile, src placeholder)
-Jenkinsfile # sample Jenkins Pipeline (updates manifest-repo)
-values/gitea-values.yaml # optional Helm values for Gitea
-values/jenkins-values.yaml
+Namespace : dev-tools
+dev : 개발환경
+stg : 테스트환경
+prd : 운영환경(Production)
+기본 profile은 dev이며, 테스트나 운영환경을 위한 설치를 위해 *.sh prd와 같이 argument로 구분하도록 한다.
 </pre>
+
+## windows11의 로컬 컴퓨터에 설치된 인증서 관리자 설정
+- Win + R 키를 누름 → 실행 창 열기
+- certmgr.msc 입력 → Enter
+- '신뢰할 수 있는 루트 인증기관/인증서'를 선택하여 설치된 로컬 인증서를 확인
+
+## git에 신뢰할 인증서 등록
+git config --global http."https://gitea.k8s.dev/".sslCAInfo  C:/dev/git-repo/k8s-bootcamp/devops-infra/setup/k8s.dev.crt
+git config --global --unset http."https://gitea.k8s.dev/".sslCAInfo
+
+## Gitea
+admin 계정에 manifest-repo 저장소 추가 후, jenkins/argocd의 연계를 위해 gitops의 application 배포 구성을 복제한다
+
+## Jenkins
+github에서 k8s-bootcamp를 사용하기 위한 credential을 추가한다.
+  credential name : github-credential
 
 ## gitea, jenkins, argocd로 CICD를 docker desktop의 kubernetes cluster에 구성할 때 가장 곤란했던점
 ***********************************************************************************************
@@ -65,7 +71,3 @@ k8s cluster 내에 설치한 gitea는 http service만을 제공하므로 별도�
 argocd 설정이나, apps.yaml에서 포함하는 repository설정으로는 이것을 강제할 수 없고, docker setting으로만 변경할 수 있다.
 window docker desktop의 경우 '설정' / 'Docker Engine' 메뉴에서 다음을 추가함으로써 http 통신을 하도록 변경할 수 있다.
 
-# windows11의 로컬 컴퓨터에 설치된 인증서 관리자 설정
-- Win + R 키를 누름 → 실행 창 열기
-- certmgr.msc 입력 → Enter
-- '신뢰할 수 있는 루트 인증기관/인증서'를 선택하여 설치된 로컬 인증서를 확인

@@ -25,17 +25,17 @@ spec:
   containers:
     - name: gradle
       image: gradle:7.6-jdk17
+      imagePullPolicy: IfNotPresent
       securityContext:
         runAsUser: 1000
       command: ['sleep']
       args: ['infinity']
       volumeMounts:
-        - name: workspace
-          mountPath: /home/jenkins/workspace
-        - name: gradle-cache
-          mountPath: /home/jenkins/.gradle
+        - name: jenkins-home
+          mountPath: /home/jenkins
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
+      imagePullPolicy: IfNotPresent
       securityContext:
         runAsUser: 0
       command: ['sleep']
@@ -43,8 +43,8 @@ spec:
       volumeMounts:
         - name: docker-config
           mountPath: /kaniko/.docker
-        - name: workspace
-          mountPath: /home/jenkins/workspace
+        - name: jenkins-home
+          mountPath: /home/jenkins
   volumes:
     - name: docker-config
       secret:
@@ -52,12 +52,9 @@ spec:
         items:
           - key: .dockerconfigjson
             path: config.json
-    - name: workspace
-      emptyDir:
-        memory: false
-    - name: gradle-cache
+    - name: jenkins-home
       persistentVolumeClaim:
-        claimName: jenkins-gradle-cache
+        claimName: jenkins-pvc
 """
       defaultContainer 'gradle'
       //customWorkspace '/home/jenkins/agent/workspace'
@@ -71,7 +68,7 @@ spec:
     // TAG = "${env.BUILD_NUMBER}"
     TAG = 'latest'
     BRANCH = 'main'
-    GITHUB_CRED_ID = 'github-matspooon-credential'
+    // GITHUB_CRED_ID = 'github-credential'
     GITEA_USERNAME = 'admin'
     GITEA_PASSWORD = 'admin'
   }
@@ -82,9 +79,9 @@ spec:
         container('gradle'){
           sh 'git config --global --add safe.directory ${WORKSPACE}'
 
-          git url: 'https://github.com/matspooon/ks8-bootcamp.git',
-          branch: env.BRANCH,
-          credentialsId: env.GITHUB_CRED_ID
+          git url: 'https://github.com/matspooon/k8s-bootcamp.git',
+          branch: env.BRANCH
+          // credentialsId: env.GITHUB_CRED_ID
           
           script {
             env.GIT_COMMIT_SHA = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()

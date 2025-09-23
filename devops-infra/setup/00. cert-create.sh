@@ -28,3 +28,5 @@ kubectl -n apps create configmap gitea-selfsigned-ca \
   --from-file=ca.crt=gitea-tls.crt
 kubectl -n apps create secret generic gitea-selfsigned-ca \
   --from-file=ca.crt=gitea-tls.crt
+
+# git 사설 인증서 에러가 발생할 경우, README.md를 참고하여 신뢰할 인증서 등록 필요
