@@ -4,8 +4,7 @@ image:
   #repository: gitea-https.dev-tools.svc.cluster.local:443/admin/backend-app
   repository: gitea.k8s.dev:443/admin/backend-app
   tag: ""
-  #pullPolicy: IfNotPresent
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 imagePullSecrets: 
 - name: docker-registry-gitea-cred

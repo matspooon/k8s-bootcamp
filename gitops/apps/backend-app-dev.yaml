@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: backend-app-dev
-  namespace: dev-tools
+  namespace: dev-tools # argocd가 설치된 네임스페이스
 spec:
   project: default
   source:

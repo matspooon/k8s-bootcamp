@@ -1,8 +1,5 @@
 # ArgoCD + GIT : helm chart로 관리하는 배포용 apps.yaml
 
-## gitea에 repostiory 등록
-git remote add origin https://gitea.k8s.dev/admin/manifest-repo.git
-
 ## Direcotry Structure
 
 ## 서비스(운영) 환경
@@ -20,3 +17,8 @@ namespace : apps-dev
 labels :
   profile : dev
 
+## helm template 검증 방법
+<pre>
+helm template backend-app charts/backend-app --namespace apps-dev --values envs/dev/backend-values.yaml > backend-app.yaml
+kubectl apply -f backend-app.yaml
+</pre>

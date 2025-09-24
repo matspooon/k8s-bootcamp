@@ -1,3 +1,10 @@
 env:
   - name: SPRING_PROFILES_ACTIVE
     value: dev
+
+service:
+  namespace: apps-dev
+
+image:
+  tag: latest # local 개발 환경에서는 이미지 버전을 latest로 고정한다
+  pullPolicy: Always

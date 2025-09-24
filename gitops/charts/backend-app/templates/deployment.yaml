@@ -32,7 +32,7 @@ spec:
                 key: DB_URL
           envFrom:
           - secretRef:
-            name: {{ .Values.db.secretName }}
+              name: {{ .Values.db.secretName }}
       imagePullSecrets: 
         {{- range .Values.imagePullSecrets }}
         - name: {{ .name }}
