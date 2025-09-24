@@ -117,8 +117,15 @@ spec:
       steps{
         dir('..') {
           sh '''#!/bin/bash
-            git clone "http://${GITEA_USERNAME}:${GITEA_PASSWORD}@gitea-http.dev-tools.svc.cluster.local:3000/admin/manifest-repo.git"
-            pwd
+            if [ -d "manifest-repo/.git" ]; then
+              cd manifest-repo
+              git fetch --all
+              git reset --hard origin/main
+            else 
+              echo "clone manifest-repo"
+              git clone "http://${GITEA_USERNAME}:${GITEA_PASSWORD}@gitea-http.dev-tools.svc.cluster.local:3000/admin/manifest-repo.git"
+            fi
+
           '''
 
           // update deploy version 
@@ -150,14 +157,12 @@ spec:
       }
     }
 
-    stages {
-      stage('Deploy to ArgoCD via API') {
-        steps {
-          sh '''
-              curl -k -u admin:admin \
-                -X POST https://argocd.k8s.dev/api/v1/applications/backend-app-dev/sync
-          '''
-        }
+    stage('Deploy to ArgoCD via API') {
+      steps {
+        sh '''
+            curl -k -u admin:admin \
+              -X POST http://argocd-server.dev-tools.svc.cluster.local/api/v1/applications/backend-app-dev/sync
+        '''
       }
     }
   }

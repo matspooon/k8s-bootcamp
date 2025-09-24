@@ -8,7 +8,7 @@ data:
   DB_USERNAME: cG9zdGdyZXM=
   DB_PASSWORD: cG9zdGdyZXM=
 stringData:
-  DB_URL: "jdbc:postgresql://postgres-service.app-dev.svc.cluster.local:5432/k8sdb"
+  DB_URL: "jdbc:postgresql://postgres-service.apps-dev.svc.cluster.local:5432/k8sdb"
 ---
 apiVersion: apps/v1
 kind: Deployment
