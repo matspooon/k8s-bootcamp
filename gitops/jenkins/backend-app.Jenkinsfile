@@ -10,29 +10,27 @@ pipeline{
     }
     */
     kubernetes {
+      workspaceVolume persistentVolumeClaimWorkspaceVolume(claimName: 'jenkins-workspace-pvc', readOnly: false)
       yaml """
 apiVersion: v1
 kind: Pod
 env:
   - name: JENKINS_HOME
     value: /home/jenkins
-  - name: HOME
-    value: /home/jenkins
 spec:
   securityContext:
     runAsUser: 1000
+    runAsGroup: 1000
     fsGroup: 1000
   containers:
     - name: gradle
       image: gradle:7.6-jdk17
       imagePullPolicy: IfNotPresent
-      securityContext:
-        runAsUser: 1000
       command: ['sleep']
       args: ['infinity']
       volumeMounts:
-        - name: jenkins-home
-          mountPath: /home/jenkins
+        - name: jenkins-gradle
+          mountPath: /home/jenkins/.gradle/
     - name: kaniko
       image: gcr.io/kaniko-project/executor:debug
       imagePullPolicy: IfNotPresent
@@ -43,8 +41,6 @@ spec:
       volumeMounts:
         - name: docker-config
           mountPath: /kaniko/.docker
-        - name: jenkins-home
-          mountPath: /home/jenkins
   volumes:
     - name: docker-config
       secret:
@@ -52,12 +48,12 @@ spec:
         items:
           - key: .dockerconfigjson
             path: config.json
-    - name: jenkins-home
+    - name: jenkins-gradle
       persistentVolumeClaim:
-        claimName: jenkins-pvc
+        claimName: jenkins-gradle-pvc
 """
       defaultContainer 'gradle'
-      //customWorkspace '/home/jenkins/agent/workspace'
+      // customWorkspace '/home/jenkins/agent/workspace'
     }
   }
 
@@ -74,7 +70,7 @@ spec:
   }
 
   stages{
-    stage('gradle'){
+    stage('gradle build'){
       steps{
         container('gradle'){
           sh 'git config --global --add safe.directory ${WORKSPACE}'
@@ -89,13 +85,13 @@ spec:
 
           dir('backend-app') {
             sh 'pwd && ls -la'
-            sh 'sh ./gradlew bootJar -x test'
+            sh 'sh ./gradlew -Dgradle.user.home=/home/jenkins/.gradle -Dorg.gradle.daemon=false bootJar -x test'
             sh 'mv ./app/build/libs/*.jar ./'
           }
         }
       }
     }
-    stage('docker'){
+    stage('docker build & push'){
       steps{
         container('kaniko'){
           sh """
@@ -117,7 +113,7 @@ spec:
       }
     }
 
-    stage('update k8s deployment'){
+    stage('update deployment'){
       steps{
         dir('..') {
           sh '''#!/bin/bash
@@ -149,6 +145,17 @@ spec:
 
             # 푸시 (username/password 사용)
             git push "http://${GITEA_USERNAME}:${GITEA_PASSWORD}@gitea-http.dev-tools.svc.cluster.local:3000/admin/manifest-repo.git" ${BRANCH}
+          '''
+        }
+      }
+    }
+
+    stages {
+      stage('Deploy to ArgoCD via API') {
+        steps {
+          sh '''
+              curl -k -u admin:admin \
+                -X POST https://argocd.k8s.dev/api/v1/applications/backend-app-dev/sync
           '''
         }
       }

@@ -21,4 +21,4 @@ virtualService:
   - istio-system/msa-gateway
 
 db:
-  secretName: db-secret # k8s secret name
+  secretName: postgres-secret # db 접속 정보가 담긴 시크릿 이름

@@ -3,4 +3,4 @@ name: backend-app
 description: Backend service Helm chart
 type: application
 version: 0.1.0
-appVersion: '20250918.45'
+appVersion: '20250924.1'

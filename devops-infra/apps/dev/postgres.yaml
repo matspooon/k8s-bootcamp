@@ -5,8 +5,8 @@ metadata:
 type: Opaque
 data:
   # base64 인코딩된 값 (예: "postgres" → "cG9zdGdyZXM=")
-  postgres-user: cG9zdGdyZXM=
-  postgres-password: cG9zdGdyZXM=
+  DB_USERNAME: cG9zdGdyZXM=
+  DB_PASSWORD: cG9zdGdyZXM=
 stringData:
   DB_URL: "jdbc:postgresql://postgres-service.app-dev.svc.cluster.local:5432/k8sdb"
 ---
@@ -36,12 +36,12 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-secret
-              key: postgres-user
+              key: DB_USERNAME
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               name: postgres-secret
-              key: postgres-password
+              key: DB_PASSWORD
         - name: POSTGRES_DB
           value: k8sdb
         volumeMounts:

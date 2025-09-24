@@ -1,26 +1,63 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jenkins-pv
+  name: jenkins-workspace-pv
+  labels:
+    app: jenkins-workspace
 spec:
   capacity:
-    storage: 10Gi
+    storage: 2Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
+  storageClassName: jenkins-workspace-storage
   hostPath:
-    path: /kube/jenkins-pv
+    path: /kube/jenkins-workspace-pv
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-gradle-pv
+  labels:
+    app: jenkins-gradle
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: jenkins-gradle-storage
+  hostPath:
+    path: /kube/jenkins-gradle-pv
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jenkins-pvc
+  name: jenkins-workspace-pvc
   namespace: dev-tools       # 원하는 namespace
 spec:
   accessModes:
     - ReadWriteOnce        # 단일 노드 읽기/쓰기
   resources:
     requests:
-      storage: 10Gi         # 요청할 스토리지 용량
-  storageClassName: manual  # 사용하려는 StorageClass 이름
+      storage: 2Gi         # 요청할 스토리지 용량
+  storageClassName: jenkins-workspace-storage  # 사용하려는 StorageClass 이름
+  selector:
+    matchLabels:
+      app: jenkins-workspace
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-gradle-pvc
+  namespace: dev-tools       # 원하는 namespace
+spec:
+  accessModes:
+    - ReadWriteOnce        # 단일 노드 읽기/쓰기
+  resources:
+    requests:
+      storage: 2Gi         # 요청할 스토리지 용량
+  storageClassName: jenkins-gradle-storage  # 사용하려는 StorageClass 이름
+  selector:
+    matchLabels:
+      app: jenkins-gradle 

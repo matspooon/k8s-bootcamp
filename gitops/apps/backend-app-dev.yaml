@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: backend-app
+  name: backend-app-dev
   namespace: dev-tools
 spec:
   project: default
@@ -12,10 +12,10 @@ spec:
     targetRevision: main
     helm:
       valueFiles:
-        - ../../envs/prd/backend-values.yaml
+        - ../../envs/dev/backend-values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: apps
+    namespace: apps-dev
   syncPolicy:
     automated:
       prune: true
