@@ -33,25 +33,24 @@ spec:
           envFrom:
           - secretRef:
               name: {{ .Values.db.secretName }}
+          livenessProbe:        # ← 살아있는지 체크 (죽었으면 재시작)
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:       # ← 트래픽 받을 준비됐는지 체크
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          startupProbe:         # ← 앱 시작 완료 여부 체크 (느리게 뜨는 앱에 유용)
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            periodSeconds: 5
       imagePullSecrets: 
         {{- range .Values.imagePullSecrets }}
         - name: {{ .name }}
         {{- end }}
-      livenessProbe:        # ← 살아있는지 체크 (죽었으면 재시작)
-        httpGet:
-          path: /healthcheck
-          port: 8080
-        initialDelaySeconds: 10
-        periodSeconds: 15
-      readinessProbe:       # ← 트래픽 받을 준비됐는지 체크
-        httpGet:
-          path: /healthcheck
-          port: 8080
-        initialDelaySeconds: 5
-        periodSeconds: 10
-      startupProbe:         # ← 앱 시작 완료 여부 체크 (느리게 뜨는 앱에 유용)
-        httpGet:
-          path: /healthcheck
-          port: 8080
-        failureThreshold: 30
-        periodSeconds: 10
