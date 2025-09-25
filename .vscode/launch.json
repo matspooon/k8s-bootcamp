@@ -1,0 +1,16 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run/Debug Spring Boot Application",
+      "request": "launch",
+      "mainClass": "dev.k8s.backend.App",
+      "projectName": "app",
+      "env": {
+        "DB_URL": "jdbc:postgresql://postgres-dev.k8s.dev:5432/k8sdb",
+        "DB_USERNAME": "postgres",
+        "DB_PASSWORD": "postgres"
+      }
+    }
+  ]
+}
