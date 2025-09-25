@@ -1,0 +1,5 @@
+{
+  "image": "backend-app:latest",
+  "appVersion": "latest",
+  "commit": ""
+}

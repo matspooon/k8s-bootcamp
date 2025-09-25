@@ -5,21 +5,34 @@ package dev.k8s.backend;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+import dev.k8s.backend.common.VersionProvider;
 
 @SpringBootApplication
 @EnableJpaAuditing
 public class App {
     private static final Logger logger = LoggerFactory.getLogger(App.class);
 
-    public String getGreeting() {
-        return "Hello World!";
+    private VersionProvider versionProvider;
+
+    @Autowired
+    public void setVersionProvider(VersionProvider versionProvider) {
+        this.versionProvider = versionProvider;
+    }
+
+    public void printGreeting() {
+        logger.info("version: {}", versionProvider.getVersion());
     }
 
     public static void main(String[] args) {
         logger.info("Started K8s Basic Application");
-        SpringApplication.run(App.class, args);
+        ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
+        App app = ctx.getBean(App.class);
+        app.printGreeting();
     }
 }

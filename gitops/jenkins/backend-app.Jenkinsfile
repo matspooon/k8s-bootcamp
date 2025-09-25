@@ -81,6 +81,8 @@ spec:
           
           script {
             env.GIT_COMMIT_SHA = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+            def today = new Date().format("yyyyMMdd")
+            env.TAG = today+'.'+BUILD_NUMBER
           }          
 
           dir('backend-app') {
@@ -130,10 +132,9 @@ spec:
 
           // update deploy version 
           script {
-            def today = new Date().format("yyyyMMdd")
             def charts = readYaml file: "manifest-repo/charts/${env.IMAGE}/Chart.yaml"
             echo "Chart: ${charts}"
-            charts.appVersion = today+'.'+BUILD_NUMBER
+            charts.appVersion = env.TAG
             echo "Updated chart: ${charts}"
             writeYaml file: "manifest-repo/charts/${env.IMAGE}/Chart.yaml", data: charts, overwrite: true
           }
