@@ -81,12 +81,20 @@ spec:
           
           script {
             env.GIT_COMMIT_SHA = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+            def props = readJSON file: 'backend-app/app/src/main/resources/version.json'
+            props.image = env.IMAGE+':'+env.TAG
+            props.appVersion = env.TAG
+            props.commit = env.GIT_COMMIT_SHA
+            writeJSON file: 'backend-app/app/src/main/resources/version.json', json: props, pretty: 2, overwrite: true
+            sh 'cat backend-app/app/src/main/resources/version.json'
           }          
 
           dir('backend-app') {
             sh 'pwd && ls -la'
             sh 'sh ./gradlew -Dgradle.user.home=/home/jenkins/.gradle -Dorg.gradle.daemon=false bootJar -x test'
+            sh 'rm -f ./apps.jar'
             sh 'mv ./app/build/libs/*.jar ./'
+            sh 'git reset'
           }
         }
       }

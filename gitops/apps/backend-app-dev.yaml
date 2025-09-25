@@ -22,3 +22,15 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/template/spec/containers/0/livenessProbe/timeoutSeconds
+        - /spec/template/spec/containers/0/livenessProbe/successThreshold
+        - /spec/template/spec/containers/0/livenessProbe/failureThreshold
+        - /spec/template/spec/containers/0/readinessProbe/timeoutSeconds
+        - /spec/template/spec/containers/0/readinessProbe/successThreshold
+        - /spec/template/spec/containers/0/readinessProbe/failureThreshold
+        - /spec/template/spec/containers/0/startupProbe/timeoutSeconds
+        - /spec/template/spec/containers/0/startupProbe/successThreshold

@@ -82,6 +82,6 @@ kubectl delete appprojects --all -A
 kubectl delete crd applications.argoproj.io appprojects.argoproj.io applicationsets.argoproj.io
 
 ## application 안지워질때
-kubectl get application -n argocd -o yaml
-kubectl patch application backend-app -n argocd -p '{"metadata":{"finalizers":[]}}' --type=merge
+kubectl get application -n dev-tools -o yaml
+kubectl patch application backend-app -n dev-tools -p '{"metadata":{"finalizers":[]}}' --type=merge
 fi
