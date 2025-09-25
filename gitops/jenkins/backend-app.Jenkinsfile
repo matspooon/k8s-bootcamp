@@ -61,8 +61,8 @@ spec:
     REGISTRY = 'gitea-http.dev-tools.svc.cluster.local:3000'
     NAMESPACE = 'admin'
     IMAGE = 'backend-app'
-    // TAG = "${env.BUILD_NUMBER}"
-    TAG = 'latest'
+    TAG = "${new Date().format('yyyyMMdd')}.${env.BUILD_NUMBER}"
+    //TAG = 'latest'
     BRANCH = 'main'
     // GITHUB_CRED_ID = 'github-credential'
     GITEA_USERNAME = 'admin'
@@ -81,8 +81,6 @@ spec:
           
           script {
             env.GIT_COMMIT_SHA = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
-            def today = new Date().format("yyyyMMdd")
-            env.TAG = today+'.'+BUILD_NUMBER
           }          
 
           dir('backend-app') {
