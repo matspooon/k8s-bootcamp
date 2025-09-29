@@ -21,3 +21,7 @@ virtualService:
 
 db:
   secretName: postgres-secret # db 접속 정보가 담긴 시크릿 이름
+
+env:
+  - name: TZ
+    value: "Asia/Seoul"

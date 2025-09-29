@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: opensearch-vs
+  namespace: logging
+spec:
+  hosts:
+  - "opensearch-dev.k8s.dev"
+  gateways:
+  - istio-system/msa-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /      # "/" 이하 모든 요청 매칭
+    rewrite:
+      uri: /         # 기본 컨텍스트 경로에 맞춰 rewrite
+    route:
+      - destination:
+          host: opensearch-dashboards.logging.svc.cluster.local
+          port:
+            number: 5601

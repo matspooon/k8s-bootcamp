@@ -27,6 +27,8 @@ dependencies {
     
     implementation 'org.apache.commons:commons-lang3:3.9'
     runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.jodd:jodd-util:6.3.0' // jakrata commons beanutils 대체
+    implementation 'org.apache.commons:commons-lang3:3.19.0'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'

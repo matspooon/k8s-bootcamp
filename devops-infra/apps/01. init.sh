@@ -1,9 +1,14 @@
+#!/bin/bash
+
 # Kubernetes apps namespace
 kubectl create namespace apps-dev
 kubectl create namespace apps-stg
 kubectl create namespace apps
 
 PROFILE=dev
+if [ -n "$1" ]; then
+    PROFILE="$1"
+fi
 NAMESPACE=apps-dev
 
 # install db
@@ -19,5 +24,3 @@ kubectl delete -n $NAMESPACE -f $PROFILE/postgres-job.yaml --cascade=true
 # install redis
 
 # install mq
-
-# install opensearch
