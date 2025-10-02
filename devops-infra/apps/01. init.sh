@@ -11,6 +11,10 @@ if [ -n "$1" ]; then
 fi
 NAMESPACE=apps-dev
 
+# install timezone daemonset
+kubectl apply -f tz-daemon.yaml
+kubectl delete -f tz-daemon.yaml --cascade=true
+
 # install db
 kubectl apply -n $NAMESPACE -f $PROFILE/postgres-pvc.yaml
 kubectl apply -n $NAMESPACE -f $PROFILE/postgres.yaml

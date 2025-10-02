@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: set-default-tz
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: set-default-tz
+  template:
+    metadata:
+      labels:
+        name: set-default-tz
+    spec:
+      hostPID: true
+      containers:
+      - name: set-tz
+        image: alpine:3.18
+        command:
+          - /bin/sh
+          - -c
+          - |
+            rm -f /host/etc/localtime
+            ln -sf /usr/share/zoneinfo/Asia/Seoul /host/etc/localtime
+            sleep infinity
+        volumeMounts:
+          - mountPath: /host/etc
+            name: host-etc
+      volumes:
+        - name: host-etc
+          hostPath:
+            path: /etc
