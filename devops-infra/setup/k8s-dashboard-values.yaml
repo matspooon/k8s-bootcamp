@@ -1,0 +1,6 @@
+# kong proxy
+kong:
+  proxy:
+    type: ClusterIP
+    http:
+      enabled: true
