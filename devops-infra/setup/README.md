@@ -14,8 +14,10 @@ prd : 운영환경(Production)
 - '신뢰할 수 있는 루트 인증기관/인증서'를 선택하여 설치된 로컬 인증서를 확인
 
 ## git에 신뢰할 인증서 등록
-git config --global http."https://gitea.k8s.dev/".sslCAInfo  C:/dev/git-repo/k8s-bootcamp/devops-infra/setup/k8s.dev.crt
-git config --global --unset http."https://gitea.k8s.dev/".sslCAInfo
+- 등록:
+  git config --global http."https://gitea.k8s.dev/".sslCAInfo  C:/dev/git-repo/k8s-bootcamp/devops-infra/setup/k8s.dev.crt
+- 제거:
+  git config --global --unset http."https://gitea.k8s.dev/".sslCAInfo
 
 ## Gitea
 admin 계정에 manifest-repo 저장소 추가 후, jenkins/argocd의 연계를 위해 gitops의 application 배포 구성을 복제한다
