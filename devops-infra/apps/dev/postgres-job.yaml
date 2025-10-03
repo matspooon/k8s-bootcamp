@@ -23,7 +23,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: postgres-secret
-              key: postgres-password
+              key: DB_PASSWORD
         volumeMounts:
         - name: db-schema
           mountPath: /scripts/schema

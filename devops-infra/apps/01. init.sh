@@ -23,7 +23,7 @@ kubectl apply -n $NAMESPACE -f $PROFILE/postgres.yaml
 kubectl create configmap db-schema -n $NAMESPACE --from-file=db-schema.sql=./dev/db-schema.sql
 kubectl create configmap db-init-data -n $NAMESPACE --from-file=db-init-data.sql=./dev/db-init-data.sql
 kubectl apply -n $NAMESPACE -f $PROFILE/postgres-job.yaml
-kubectl delete -n $NAMESPACE -f $PROFILE/postgres-job.yaml --cascade=true
+kubectl delete -n $NAMESPACE -f $PROFILE/postgres-job.yaml
 
 # install redis
 
