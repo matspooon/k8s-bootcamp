@@ -38,16 +38,16 @@ data:
         Key_Name          log
         Parser            java_log
 
-    # [FILTER]
-    #     Name                kubernetes
-    #     Match               kube.*
-    #     Kube_URL            https://kubernetes.default.svc:443
-    #     Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    #     Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
-    #     Merge_Log           On
-    #     Keep_Log            Off
-    #     Labels              On
-    #     Annotations         Off
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+        Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+        Merge_Log           On
+        Keep_Log            Off
+        Labels              On
+        Annotations         Off
 
     # [FILTER]
     #     Name                grep
@@ -59,16 +59,16 @@ data:
         Match kube.*
         Host  opensearch-cluster-master.logging.svc.cluster.local
         Port  9200
-        Index apps-dev-logs
+        # Index apps-dev-logs
+        Logstash_Format On
+        Logstash_Prefix_Key $kubernetes['namespace_name']
+        Logstash_Prefix_Separator -
+        Logstash_DateFormat %Y-%m-%d
         Suppress_Type_Name On
         HTTP_User admin
         HTTP_Passwd !2QazWsx@
         tls   On
         tls.verify Off
-
-    [OUTPUT]
-        Name  stdout
-        Match kube.*
 
   parsers.conf: |
     [PARSER]
