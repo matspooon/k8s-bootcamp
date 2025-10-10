@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>User Management</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+  <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div id="app">
+    <h2>User Management</h2>
+
+    <form @submit.prevent="addUser">
+      <input v-model="newUser.username" placeholder="Username" required>
+      <input v-model="newUser.email" placeholder="Email" required>
+      <input v-model="newUser.role" placeholder="Role">
+      <label>
+        Active
+        <input type="checkbox" v-model="newUser.active">
+      </label>
+      <button type="submit">Add</button>
+    </form>
+
+    <div id="userGrid" class="mt-4"></div>
+  </div>
+
+  <script th:src="@{/js/user-app.js}"></script>
+</body>
+
+</html>

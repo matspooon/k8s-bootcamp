@@ -12,6 +12,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       "[hibernate.hbm2ddl.jdbc_metadata_extraction_strategy]": individually
+  thymeleaf:
+    cache: false
 
 logging:
   level:
